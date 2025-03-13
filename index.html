@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ria Bypasser</title>
+    <title>Text Converter</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body {
@@ -57,25 +57,52 @@
     </style>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            const charMap = {
+            const charMapMethod1 = {
                 a: "a", b: "ß", c: "¢", d: "ɖ", e: "ɇ", f: "ϝ", g: "ᵍ", h: "h",
                 i: "ï", j: "j", k: "k", l: "l", m: "m", o: "ð", p: "p", q: "ᕴ",
                 r: "r", s: "$", t: "†", u: "µ", v: "ᐺ", w: "ш", x: "x", y: "¥", z: "z"
             };
-            
+
+            const charMapMethod2 = {
+                a: "ạ", b: "ხ", c: "ㄷ", d: "ḑ", e: "Ҽ", f: "ẝ", g: "ġ", h: "ɧ", i: "Ȋ", j: "į", k: "ќ", l: "し", m: "m", n: "П", o: "☉", p: "ϼ", q: "q", r: "Γ", s: "Ƨ", t: "ȶ", u: "ʊ", v: "v", w: "w", x: "x", y: "ㄚ", z: "z"
+            };
+
+            const charMapMethod3 = {
+                a: "ạ", b: "ხ", c: "ㄷ", d: "ḑ", e: "Ҽ", f: "ẝ", g: "ġ", h: "ɧ", i: "Ȋ", j: "į", k: "ќ", l: "l", m: "m", n: "П", o: "ǫ", p: "ϼ", q: "q", r: "Γ", s: "Ƨ", t: "ȶ", u: "ʊ", v: "v", w: "w", x: "x", y: "ㄚ", z: "z"
+            };
+
             const input = document.getElementById("inputText");
             const output = document.getElementById("outputText");
             const copyBtn = document.getElementById("copyBtn");
             const darkModeToggle = document.getElementById("darkModeToggle");
+            const methodSelect = document.getElementById("methodSelect");
             const body = document.body;
             const container = document.querySelector(".container");
 
-            function modifyText(text) {
+            function modifyText(text, method) {
+                let charMap;
+                switch (method) {
+                    case "Method2":
+                        charMap = charMapMethod2;
+                        break;
+                    case "Method3":
+                        charMap = charMapMethod3;
+                        break;
+                    default:
+                        charMap = charMapMethod1;
+                        break;
+                }
                 return text.split('').map(char => charMap[char.toLowerCase()] || char).join('');
             }
 
             input.addEventListener("input", function () {
-                output.value = modifyText(input.value);
+                const selectedMethod = methodSelect.value;
+                output.value = modifyText(input.value, selectedMethod);
+            });
+
+            methodSelect.addEventListener("change", function () {
+                const selectedMethod = methodSelect.value;
+                output.value = modifyText(input.value, selectedMethod);
             });
 
             copyBtn.addEventListener("click", function () {
@@ -108,7 +135,15 @@
 <body class="bg-gray-900 text-white p-8 relative">
     <div class="animated-bg"></div>
     <div class="container max-w-xl mx-auto bg-gray-800 p-8 rounded-lg shadow-lg fade-in">
-        <h1 class="text-3xl font-bold mb-6 text-center text-blue-400">Ria Bypasser</h1>
+        <h1 class="text-3xl font-bold mb-6 text-center text-blue-400">Text Converter</h1>
+        <div class="mb-6">
+            <label for="methodSelect" class="block text-lg font-medium mb-2">Select Method:</label>
+            <select id="methodSelect" class="w-full p-3 text-black rounded-lg shadow-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <option value="Method1">Method 1</option>
+                <option value="Method2">Method 2</option>
+                <option value="Method3">Method 3</option>
+            </select>
+        </div>
         <textarea id="inputText" class="w-full p-4 mb-6 text-black rounded-lg shadow-md bg-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter text..."></textarea>
         <textarea id="outputText" class="w-full p-4 mb-6 text-black rounded-lg shadow-md bg-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500" readonly></textarea>
         <button id="copyBtn" class="w-full bg-blue-500 px-6 py-3 rounded-lg font-bold text-white hover:bg-blue-600 transition transform hover:scale-105">Copy</button>
