@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ria Bypasser</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            transition: background 0.5s ease-in-out, color 0.5s ease-in-out;
+        }
+        .animated-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #1e293b, #0f172a);
+            background-size: 400% 400%;
+            animation: gradientBG 10s ease infinite;
+            z-index: -1;
+        }
+        .light-mode {
+            background: #f8fafc !important;
+            color: #1e293b !important;
+        }
+        .light-mode .container {
+            background: #ffffff !important;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        .fade-out {
+            animation: fadeOut 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeOut {
+            from { opacity: 1; transform: translateY(0); }
+            to { opacity: 0; transform: translateY(10px); }
+        }
+        .glow {
+            animation: glow 2s infinite alternate;
+        }
+        @keyframes glow {
+            from { box-shadow: 0 0 10px rgba(59, 130, 246, 0.5); }
+            to { box-shadow: 0 0 20px rgba(59, 130, 246, 0.8); }
+        }
+    </style>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const charMap = {
+                a: "a", b: "ß", c: "¢", d: "ɖ", e: "ɇ", f: "ϝ", g: "ᵍ", h: "h",
+                i: "ï", j: "j", k: "k", l: "l", m: "m", o: "ð", p: "p", q: "ᕴ",
+                r: "r", s: "$", t: "†", u: "µ", v: "ᐺ", w: "ш", x: "x", y: "¥", z: "z"
+            };
+            
+            const input = document.getElementById("inputText");
+            const output = document.getElementById("outputText");
+            const copyBtn = document.getElementById("copyBtn");
+            const darkModeToggle = document.getElementById("darkModeToggle");
+            const body = document.body;
+            const container = document.querySelector(".container");
+
+            function modifyText(text) {
+                return text.split('').map(char => charMap[char.toLowerCase()] || char).join('');
+            }
+
+            input.addEventListener("input", function () {
+                output.value = modifyText(input.value);
+            });
+
+            copyBtn.addEventListener("click", function () {
+                navigator.clipboard.writeText(output.value);
+                showNotification("Text copied to clipboard!");
+            });
+
+            darkModeToggle.addEventListener("change", function () {
+                if (darkModeToggle.checked) {
+                    body.classList.remove("light-mode");
+                } else {
+                    body.classList.add("light-mode");
+                }
+            });
+
+            function showNotification(message) {
+                const notification = document.createElement("div");
+                notification.textContent = message;
+                notification.className = "fixed top-4 right-4 bg-blue-500 text-white px-4 py-2 rounded-lg shadow-lg fade-in glow";
+                document.body.appendChild(notification);
+
+                setTimeout(() => {
+                    notification.classList.add("fade-out");
+                    setTimeout(() => notification.remove(), 500); // Remove after fade-out animation
+                }, 2000);
+            }
+        });
+    </script>
+</head>
+<body class="bg-gray-900 text-white p-8 relative">
+    <div class="animated-bg"></div>
+    <div class="container max-w-xl mx-auto bg-gray-800 p-8 rounded-lg shadow-lg fade-in">
+        <h1 class="text-3xl font-bold mb-6 text-center text-blue-400">Ria Bypasser</h1>
+        <textarea id="inputText" class="w-full p-4 mb-6 text-black rounded-lg shadow-md bg-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter text..."></textarea>
+        <textarea id="outputText" class="w-full p-4 mb-6 text-black rounded-lg shadow-md bg-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500" readonly></textarea>
+        <button id="copyBtn" class="w-full bg-blue-500 px-6 py-3 rounded-lg font-bold text-white hover:bg-blue-600 transition transform hover:scale-105">Copy</button>
+        <div class="mt-6 flex items-center justify-center">
+            <label class="flex items-center space-x-2">
+                <input type="checkbox" id="darkModeToggle" checked class="w-5 h-5 rounded-full">
+                <span class="text-lg">Dark Mode</span>
+            </label>
+        </div>
+    </div>
+</body>
+</html>
